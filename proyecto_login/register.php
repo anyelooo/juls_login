@@ -8,18 +8,17 @@ $username_err = $password_err = $confirm_password_err = "";
  if($_SERVER["REQUEST_METHOD"] == "POST"){
  
     // Validate username
-    if(empty(trim($_POST["username"]))){
+    if(empty(trim($_POST["r_mail"]))){
         $username_err = "ingresa el mail.";
     } else{
-        
-        $sql = "SELECT id FROM users WHERE username = ?";
+        $g_mail=$_POST["r_mail"];
+        $sql = "SELECT id FROM user WHERE mail = '$g_mail'";
         
         if($stmt = mysqli_prepare($link, $sql)){
             
-            mysqli_stmt_bind_param($stmt, "s", $param_username);
             
             // Set parameters
-            $param_username = trim($_POST["username"]);
+            $param_username = trim($_POST["r_mail"]);
             
            
             if(mysqli_stmt_execute($stmt)){
@@ -41,19 +40,19 @@ $username_err = $password_err = $confirm_password_err = "";
     }
     
     
-    if(empty(trim($_POST["password"]))){
+    if(empty(trim($_POST["r_password"]))){
         $password_err = "Please enter a password.";     
-    } elseif(strlen(trim($_POST["password"])) < 4){
+    } elseif(strlen(trim($_POST["r_password"])) < 4){
         $password_err = "tu contraseña debe tener mas de 4 caracteres";
     } else{
-        $password = trim($_POST["password"]);
+        $password = trim($_POST["r_password"]);
     }
     
   
-    if(empty(trim($_POST["confirm_password"]))){
-        $confirm_password_err = "Porfavor ingresa una contraseña.";     
+    if(empty(trim($_POST["r_confirm_password"]))){
+        $confirm_password_err = "Por favor ingresa una contraseña.";     
     } else{
-        $confirm_password = trim($_POST["confirm_password"]);
+        $confirm_password = trim($_POST["r_confirm_password"]);
         if(empty($password_err) && ($password != $confirm_password)){
             $confirm_password_err = "La contraseña no coincide.";
         }
@@ -63,12 +62,9 @@ $username_err = $password_err = $confirm_password_err = "";
     if(empty($username_err) && empty($password_err) && empty($confirm_password_err)){
         
       
-        $sql = "INSERT INTO users (username, password) VALUES (?, ?)";
+        $sql = "INSERT INTO user (mail, password) VALUES ('$username','$password')";
          
         if($stmt = mysqli_prepare($link, $sql)){
-            
-            mysqli_stmt_bind_param($stmt, "ss", $param_username, $param_password);
-            
             
             $param_username = $username;
             $param_password = password_hash($password, PASSWORD_DEFAULT); // Creates a password hash
@@ -95,38 +91,38 @@ $username_err = $password_err = $confirm_password_err = "";
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Sign Up</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
-    <style type="text/css">
-        body{ font: 14px sans-serif; }
-        .wrapper{ width: 350px; padding: 20px; }
-    </style>
-</head>
+    <title>Registrarse</title>
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="estilo.css"></head>
 <body>
-    <div class="wrapper">
+    <div class="wrapper fadeInDown">
         <h2>Crear sesion</h2>
    
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
             <div class="form-group <?php echo (!empty($username_err)) ? 'has-error' : ''; ?>">
                 <label>mail</label>
-                <input type="text" name="username" class="form-control" value="<?php echo $username; ?>">
+                <input type="text" name="r_mail" class="form-control" value="<?php echo $username; ?>">
                 <span class="help-block"><?php echo $username_err; ?></span>
             </div>    
             <div class="form-group <?php echo (!empty($password_err)) ? 'has-error' : ''; ?>">
                 <label>Contraseña</label>
-                <input type="password" name="password" class="form-control" value="<?php echo $password; ?>">
+                <input type="password" name="r_password" class="form-control" value="<?php echo $password; ?>">
                 <span class="help-block"><?php echo $password_err; ?></span>
             </div>
             <div class="form-group <?php echo (!empty($confirm_password_err)) ? 'has-error' : ''; ?>">
                 <label>Confirmar Contraseña</label>
-                <input type="password" name="confirm_password" class="form-control" value="<?php echo $confirm_password; ?>">
+                <input type="password" name="r_confirm_password" class="form-control" value="<?php echo $confirm_password; ?>">
                 <span class="help-block"><?php echo $confirm_password_err; ?></span>
             </div>
             <div class="form-group">
-                <input type="submit" class="btn btn-primary" value="Submit">
+                <input type="submit" class="btn btn-primary" value="Enviar">
                 <input type="reset" class="btn btn-default" value="Reset">
             </div>
-            <p>ya tienes cuenta? <a href="login.php"></a>.</p>
+            </div>
+            <a href="login.php">Iniciar sesión</a>
+            </div>
         </form>
     </div>    
 </body>

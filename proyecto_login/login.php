@@ -14,13 +14,13 @@ $username_err = $password_err = "";
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
  
-    if(empty(trim($_POST["mail"]))){
+    if(empty(trim($_POST["r_mail"]))){
         $username_err = "ingresa el correo.";
     } else{
         $username = trim($_POST["r_mail"]);
     }
     
-    if(empty(trim($_POST["password"]))){
+    if(empty(trim($_POST["r_password"]))){
         $password_err = "Ingresa la contraseña";
     } else{
         $password = trim($_POST["r_password"]);
@@ -96,7 +96,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             <div class="form-group">
                 <input type="submit" class="btn btn-primary" value="Login">
             </div>
-            <p>crear una cuenta<a class="underlineHover" href="register.php"></a>.</p>
+            <a href="register.php">Resgistrarse</a>
+            </div>
         </form>
         </div>        
     </div>    
